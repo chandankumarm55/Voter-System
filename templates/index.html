@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Online Voting System</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if session.has_voted %}
+                <li><a href="{{ url_for('results') }}">Results</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Welcome, {{ session.username }}!</h2>
+            {% if session.has_voted %}
+            <p>You have already cast your vote. <a href="{{ url_for('results') }}">View Results</a></p>
+            {% else %}
+            <p>Please cast your vote for one of the candidates below.</p>
+            {% endif %}
+        </section>
+
+        {% if not session.has_voted %}
+        <section class="candidates">
+            <h2>Candidates</h2>
+            <div class="candidate-grid">
+                {% for candidate in candidates %}
+                <div class="candidate-card">
+                    <h3>{{ candidate.candidate_name }}</h3>
+                    <p class="position">Position: {{ candidate.position }}</p>
+                    <p class="description">{{ candidate.description }}</p>
+                    <form action="{{ url_for('vote') }}" method="post">
+                        <input type="hidden" name="candidate_id" value="{{ candidate.candidate_id }}">
+                        <button type="submit" class="vote-btn">Vote</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Simple Voting System</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Voting Results</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('results') }}">Results</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="results-section">
+            <h2>Election Results</h2>
+            <p>Total votes cast: {{ total_votes }}</p>
+
+            <div class="results-grid">
+                {% for candidate in candidates %}
+                <div class="result-card">
+                    <h3>{{ candidate.candidate_name }}</h3>
+                    <p class="position">{{ candidate.position }}</p>
+                    <div class="vote-bar-container">
+                        <div class="vote-bar"
+                            style="width: {{ (candidate.votes_count / total_votes * 100) if total_votes > 0 else 0 }}%">
+                        </div>
+                    </div>
+                    <p class="vote-count">
+                        <span class="votes">{{ candidate.votes_count }} votes</span>
+                        <span class="percentage">{{ "%.1f"|format(candidate.votes_count / total_votes * 100) if
+                            total_votes > 0 else 0 }}%</span>
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Simple Voting System</p>
+    </footer>
+</body>
+
+</html>
