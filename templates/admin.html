@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Voting System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -21,9 +22,12 @@
     </header>
 
     <main>
+
+        <!-- Candidates Section -->
         <section id="candidates" class="admin-section">
             <h2>Manage Candidates</h2>
 
+            <!-- Add New Candidate -->
             <div class="admin-card">
                 <h3>Add New Candidate</h3>
                 <form action="{{ url_for('add_candidate') }}" method="post">
@@ -46,6 +50,7 @@
                 </form>
             </div>
 
+            <!-- Candidate Table -->
             <h3>Current Candidates</h3>
             <table class="admin-table">
                 <thead>
@@ -67,10 +72,41 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Top 5 Candidates Chart -->
+            <h3>Top 5 Candidates by Votes</h3>
+            <canvas id="voteChart" width="400" height="200"></canvas>
         </section>
 
+        <!-- Voters Section -->
         <section id="voters" class="admin-section">
-            <h2>Registered Voters</h2>
+            <h2>Manage Voters</h2>
+
+            <!-- Add New Voter -->
+            <div class="admin-card">
+                <h3>Add New Voter</h3>
+                <form action="{{ url_for('add_voter') }}" method="post">
+                    <div class="form-group">
+                        <label for="voter_name">Voter Name</label>
+                        <input type="text" id="voter_name" name="voter_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn">Add Voter</button>
+                </form>
+            </div>
+
+            <!-- Voter Table -->
+            <h3>Registered Voters</h3>
             <table class="admin-table">
                 <thead>
                     <tr>
@@ -99,6 +135,41 @@
     <footer>
         <p>&copy; 2025 Simple Voting System - Admin Panel</p>
     </footer>
+
+    <!-- Chart Script -->
+    <script>
+        const ctx = document.getElementById('voteChart').getContext('2d');
+        const voteChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {
+                    {
+                top_candidates | map(attribute = 'candidate_name') | list | tojson
+                    }
+                },
+        datasets: [{
+            label: 'Votes',
+            data: {
+                        {
+            top_candidates | map(attribute = 'votes_count') | list | tojson
+                        }
+                    },
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+                }]
+            },
+        options: {
+            indexAxis: 'y',
+                responsive: true,
+                    scales: {
+                x: {
+                    beginAtZero: true
+                }
+            }
+        }
+        });
+    </script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
