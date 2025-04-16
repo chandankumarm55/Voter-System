@@ -11,7 +11,7 @@ public class DatabaseUtil {
     private static final String PROPERTIES_FILE = "/config.properties";
     private static String jdbcUrl;
     private static String username;
-    private static String password;
+    private static String password;a
 
     static {
         try {
